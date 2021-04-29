@@ -14,9 +14,9 @@ public:
     int Index();
     bool EsVacio();
     Nodo *Iesimo(int);
-    void Agregar();
+    void Agregar(); //----------agregar alumno y  todos pues
     void Mostrar();
-    void Eliminar(int);//--- Falta implementar
+    void Eliminar(); //--- Falta implementar
     //Funciones de orfen superior
     //@@@Github
 };
@@ -41,7 +41,7 @@ int Lista::Index()
         Nodo *aux = primerNodo;
         int index = 0;
         while (aux->SiguienteNodo() != nullptr)
-        {//Con esto llegamos hasta el ultimo nodo (antes del nullptr)
+        { //Con esto llegamos hasta el ultimo nodo (antes del nullptr)
             index++;
             aux = aux->SiguienteNodo();
         }
@@ -89,13 +89,50 @@ void Lista::Agregar()
 void Lista::Mostrar()
 {
     cout << "--- <<DATOS PERSONAS >> ---" << endl;
-    Nodo *aux = primerNodo;
-    Persona *auxPersona;
-    while (aux != nullptr)
+    if (EsVacio())
     {
-        //auxPersona = aux->GetPersona();
-        //auxPersona->Mostrar();
-        aux->GetPersona()->Mostrar();
-        aux = aux->SiguienteNodo();
+        cout << "Ningun dato registrado hasta el momento." << endl;
+    }
+    else
+    {
+        Nodo *aux = primerNodo;
+        Persona *auxPersona;
+        while (aux != nullptr)
+        {
+            aux->GetPersona()->Mostrar();
+            aux = aux->SiguienteNodo();
+        }
+    }
+}
+
+void Lista::Eliminar() //falta el caso donde no ubica a la persona
+{
+    if (EsVacio())
+    {
+        cout << "Lista vacia..." << endl;
+    }
+    else
+    {
+        Nodo *aux = primerNodo;
+        string dni;
+        cout << "Ingrese DNI a eliminar: ";
+        cin >> dni;
+        if (primerNodo->GetPersona()->GetDni() == dni)
+        {
+            primerNodo = primerNodo->SiguienteNodo();
+        }
+        else
+        {
+            while (aux->SiguienteNodo() != nullptr) //talvez  es mejor con dowhile
+            {
+                if (aux->SiguienteNodo()->GetPersona()->GetDni() == dni)
+                {
+                    aux->SiguienteNodo(aux->SiguienteNodo()->SiguienteNodo());
+                    break;
+                }
+                aux = aux->SiguienteNodo();
+            }
+        }
+        cout << "elimindado" << endl;
     }
 }
