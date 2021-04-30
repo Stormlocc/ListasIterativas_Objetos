@@ -11,6 +11,7 @@ private:
 public:
     Nodo();
     Nodo(Persona*);
+    Nodo(Persona*,Nodo*);
     ~Nodo();
     //Propiedades de Persona
     void SetPersona(Persona*);
@@ -28,6 +29,11 @@ Nodo::Nodo(Persona *nuevo)
 {
     person = nuevo;
     siguiente = nullptr;
+}
+Nodo::Nodo(Persona *nuevo,Nodo *sgteNodo)
+{
+    person = nuevo;
+    siguiente = sgteNodo;
 }
 
 void Nodo:: SetPersona(Persona *nuevo){

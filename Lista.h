@@ -13,13 +13,14 @@ private:
 
 public:
     Lista();
-    int Index();
     bool EsVacio();
-    Nodo *Iesimo(int);//agregar parametros
-    void Recorrer(void *function(Nodo *));
+    int Index();
+    Nodo *Iesimo(int); //agregar parametros
+    void Procesar(void (*function)(Nodo *));
     void AgregarPersona();
     void AgregarAlumno();
     void AgregarDocente();
+    Nodo *Ubicar();
     void Mostrar();
     void Eliminar();
 
@@ -30,7 +31,26 @@ public:
 Lista::Lista()
 {
     primerNodo = nullptr;
+    /*
+    */
+    //Apartir de aqui elimnar n filas (datos para probar)
+    Persona *p1 = new Persona("juanito", "111");
+    Persona *p2 = new Persona("pepito", "222");
+    Alumno *a1 = new Alumno("anthony", "333", "info");
+    Alumno *a2 = new Alumno("diana", "444", "info");
+    Docente *d1 = new Docente("armando", "555", "matematica");
+    Docente *d2 = new Docente("angelica", "666", "religion");
+    //Crear nodo donde agregaremos
+    Nodo *n6 = new Nodo(d2);
+    Nodo *n5 = new Nodo(d1, n6);
+    Nodo *n4 = new Nodo(a2, n5);
+    Nodo *n3 = new Nodo(a1, n4);
+    Nodo *n2 = new Nodo(p2, n3);
+    Nodo *n1 = new Nodo(p1, n2);
+
+    primerNodo = n1;
 }
+
 bool Lista::EsVacio()
 {
     return primerNodo == nullptr;
@@ -97,40 +117,52 @@ void Lista::AgregarDocente()
 }
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-void Lista::Recorrer(void * function(Nodo *a) = nullptr){
-    Nodo *aux= primerNodo;
-    while(aux->SiguienteNodo() != nullptr){
-        if(function != nullptr)
-            function(aux);
-        aux = aux->SiguienteNodo();
+void Lista::Procesar(void (*function)(Nodo *per))
+{
+    Nodo *aux = primerNodo;
+    while (aux->SiguienteNodo() != nullptr)
+    {
+        function(aux);
+    }
+}
+
+Nodo *Lista::Ubicar()//que pasa sies un dni que no existe
+{
+    if (EsVacio()){
+        cout << "Lista vacia" << endl;
+        return nullptr;
+    }
+    else
+    {
+        static Nodo *aux1;
+        static string auxDni;
+        cout << "Ingresen dni: ";
+        cin >> auxDni;
+        Procesar([](Nodo *p){if(p->GetPersona()->GetDni()==auxDni) 
+                                    aux1 = p;
+                                });
+        return aux1;
     }
 }
 
 int Lista::Index()
 {
     if (EsVacio())
-    {
         return -1;
-    }
     else
     {
-        Nodo *aux = primerNodo;
-        int index = 0;
-        while (aux->SiguienteNodo() != nullptr)
-        { //Con esto llegamos hasta el ultimo nodo (antes del nullptr)
-            index++;
-            aux = aux->SiguienteNodo();
-        }
-        return index;
+        static int index =0;
+        Procesar([](Nodo *p){index++;} );
+        int iindex = index;
+        index = 0;//reiniciar index
+        return iindex;
     }
 }
 
-Nodo *Lista::Iesimo(int index)
+Nodo *Lista::Iesimo(int index)//sirve para agregar
 {
     if (EsVacio() || index < 0 || index > Index())
-    {
         return nullptr;
-    }
     else
     {
         Nodo *aux = primerNodo;
@@ -142,17 +174,12 @@ Nodo *Lista::Iesimo(int index)
     }
 }
 
-
-
 void Lista::Mostrar()
 {
     cout << "--- <<DATOS PERSONAS >> ---" << endl;
     if (EsVacio())
-    {
         cout << "Ningun dato registrado hasta el momento." << endl;
-    }
-    else
-    {
+    else{
         Nodo *aux = primerNodo;
         while (aux != nullptr)
         {
@@ -162,7 +189,7 @@ void Lista::Mostrar()
     }
 }
 
-void Lista::Eliminar() //falta el caso donde no ubica a la persona
+void Lista::Eliminar() //falta mostrar no ubica a la persona
 {
     if (EsVacio())
     {
@@ -172,26 +199,28 @@ void Lista::Eliminar() //falta el caso donde no ubica a la persona
     {
         Nodo *aux = primerNodo;
         //input dato
-        string dni;
+        static string dni;
         cout << "Ingrese DNI a eliminar: ";
         cin >> dni;
         //Caso ah eliminar á
         if (primerNodo->GetPersona()->GetDni() == dni)
         {
             primerNodo = primerNodo->SiguienteNodo();
+            cout << "eliminado exitosamente...." << endl;
         }
         else
         {
-            while (aux->SiguienteNodo() != nullptr)
-            {
-                if (aux->SiguienteNodo()->GetPersona()->GetDni() == dni)
+            Procesar([](Nodo *aux){if (aux->SiguienteNodo()->GetPersona()->GetDni() == dni)
                 {
                     aux->SiguienteNodo(aux->SiguienteNodo()->SiguienteNodo());
                     cout << "eliminado exitosamente...." << endl;
-                    break;
-                }
-                aux = aux->SiguienteNodo();
-            }
+                    //aqui debe entrar un break;
+                }});
         }
     }
 }
+
+//@@github 4/30/2021 00:55
+//Mejorar las varaibles que tienen static (tratar de elimnar o rehuasr)
+//optimizar eliminar mediante index
+//EL PROCESAR ESTA MAL POR QUE NO LLEGA AL ULTIMO NODO(tiene que el el while como el mostrar)(por eso no ubica el ultimo dato)

@@ -26,10 +26,6 @@ int main(){
     //Intanciado Lista iterativa
     Lista *listaa = new Lista();
     int opcion;
-    //Tener datos ya registrados
-
-    //..........
-
 
     //Ejecucion de programa
     do
@@ -62,7 +58,7 @@ int main(){
             opcion = 0;
             break;
         case 2:
-            cout<< "Longitud de lista: "<< listaa->Index()+1 << endl;
+            cout<< "Longitud de lista: "<< listaa->Index()+1<< endl;
             break;
         case 3:
             listaa->Mostrar();
@@ -71,14 +67,17 @@ int main(){
             listaa->Eliminar();
             break;
         case 5:
-            listaa->Iesimo(1)->GetPersona()->Mostrar();
-            break;
-        default:
+            Nodo *aux1 = listaa->Ubicar();
+            if(aux1 == nullptr)
+                cout<<"no ubicado"<<endl;
+            else
+                aux1->GetPersona()->Mostrar();
+            delete(aux1);
             break;
         }
     } while (opcion < 6);
     
-    cout<<"FIN DEPROGRAMA"<<endl;
+    cout<<"FIN DEPROGRAMA /t /t version 1.0"<<endl;
     return 0;
 }
 
