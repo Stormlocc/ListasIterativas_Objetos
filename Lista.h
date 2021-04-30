@@ -117,12 +117,16 @@ void Lista::AgregarDocente()
 }
 //<<<<<<<<<<<<<<<<<<<<<<<<<<<<>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
-void Lista::Procesar(void (*function)(Nodo *per))
+void Lista::Procesar(void (*function)(Nodo *per)=nullptr)
 {
     Nodo *aux = primerNodo;
-    while (aux->SiguienteNodo() != nullptr)
+    while (aux != nullptr)
     {
-        function(aux);
+        if(function!=nullptr )
+            function(aux);
+        else
+            aux->GetPersona()->Mostrar();
+        aux=aux->SiguienteNodo();
     }
 }
 
@@ -151,10 +155,10 @@ int Lista::Index()
         return -1;
     else
     {
-        static int index =0;
+        static int index =-1;
         Procesar([](Nodo *p){index++;} );
         int iindex = index;
-        index = 0;//reiniciar index
+        index = -1;//reiniciar index--->>
         return iindex;
     }
 }
@@ -180,12 +184,7 @@ void Lista::Mostrar()
     if (EsVacio())
         cout << "Ningun dato registrado hasta el momento." << endl;
     else{
-        Nodo *aux = primerNodo;
-        while (aux != nullptr)
-        {
-            aux->GetPersona()->Mostrar();//no es necesario mutar xq entra directamente a la memoria guarada? creo
-            aux = aux->SiguienteNodo();
-        }
+        Procesar();
     }
 }
 
@@ -221,6 +220,3 @@ void Lista::Eliminar() //falta mostrar no ubica a la persona
 }
 
 //@@github 4/30/2021 00:55
-//Mejorar las varaibles que tienen static (tratar de elimnar o rehuasr)
-//optimizar eliminar mediante index
-//EL PROCESAR ESTA MAL POR QUE NO LLEGA AL ULTIMO NODO(tiene que el el while como el mostrar)(por eso no ubica el ultimo dato)

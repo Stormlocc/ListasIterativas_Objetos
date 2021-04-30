@@ -20,7 +20,6 @@ static void MenuPersonas(){
 }
 
 int main(){
-
     cout<<"<<<<<<<<<< PROGRAMA GESTION DE ALUMNOS EN C++ >>>>>>>>>>>"<<endl;
 
     //Intanciado Lista iterativa
@@ -79,5 +78,10 @@ int main(){
     
     cout<<"FIN DEPROGRAMA /t /t version 1.0"<<endl;
     return 0;
+
+    /*
+    @Stormlocc date: 4/30/21
+    *mejorar sacando los input de "Lista.h" y mandando desde el main salu2
+    */
 }
 
