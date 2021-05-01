@@ -77,7 +77,11 @@ int main()
             listaa->Mostrar();
             break;
         case 4:
-            listaa->Eliminar();
+            //input dato
+            string *dni;
+            cout << "Ingrese DNI a eliminar: ";
+            cin >> *dni;
+            listaa->Eliminar(dni);
             break;
         case 5:
             string *auxDni;
@@ -95,10 +99,8 @@ int main()
 
     cout << "FIN DEPROGRAMA /t /t version 1.0" << endl;
     return 0;
-
     /*
     @Stormlocc date: 4/30/21
     *mejorar sacando los input de "Lista.h" y mandando desde el main salu2
-   5
     */
 }

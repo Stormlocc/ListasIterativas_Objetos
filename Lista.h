@@ -22,7 +22,7 @@ public:
     void AgregarDocente(Docente *);
     Nodo *Ubicar(string *);
     void Mostrar();
-    void Eliminar();
+    void Eliminar(string *);
 
     //Funciones de orfen superior
     //@@@Github
@@ -131,6 +131,8 @@ Nodo *Lista::Ubicar(string *pDni)
             encontrado = p;
         }
     });
+    //Las sgtes lineas de verificar (no deberia ser necesario) lo pregunte aqui
+    //https://es.stackoverflow.com/questions/448672/static-no-se-actualiza
     if(encontrado->GetPersona()->GetDni() == *pDni)
         return encontrado ;//verificar que en realidad se encontro y no es el guarado
     else
@@ -177,7 +179,7 @@ void Lista::Mostrar()
     }
 }
 
-void Lista::Eliminar() //falta mostrar no ubica a la persona
+void Lista::Eliminar(string *dni) //falta mostrar no ubica a la persona
 {
     if (EsVacio())
     {
@@ -186,12 +188,9 @@ void Lista::Eliminar() //falta mostrar no ubica a la persona
     else
     {
         Nodo *aux = primerNodo;
-        //input dato
-        static string dni;
-        cout << "Ingrese DNI a eliminar: ";
-        cin >> dni;
+        
         //Caso ah eliminar á
-        if (primerNodo->GetPersona()->GetDni() == dni)
+        if (primerNodo->GetPersona()->GetDni() == *dni)
         {
             primerNodo = primerNodo->SiguienteNodo();
             cout << "eliminado exitosamente...." << endl;
@@ -200,7 +199,7 @@ void Lista::Eliminar() //falta mostrar no ubica a la persona
         {
             while (aux->SiguienteNodo() != nullptr)
             {
-                if (aux->SiguienteNodo()->GetPersona()->GetDni() == dni)
+                if (aux->SiguienteNodo()->GetPersona()->GetDni() == *dni)
                 {
                     aux->SiguienteNodo(aux->SiguienteNodo()->SiguienteNodo());
                     cout << "eliminado exitosamente...." << endl;
@@ -213,4 +212,3 @@ void Lista::Eliminar() //falta mostrar no ubica a la persona
 }
 
 //@@github 4/30/2021 00:55
-//algunas veces se cierra de la nada(progbar el menu de opciones que casos osn y go stackoverflow)
