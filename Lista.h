@@ -17,10 +17,10 @@ public:
     int Index();
     Nodo *Iesimo(int); //agregar parametros
     void Procesar(void (*function)(Nodo *));
-    void AgregarPersona();
-    void AgregarAlumno();
-    void AgregarDocente();
-    Nodo *Ubicar();
+    void AgregarPersona(Persona *);
+    void AgregarAlumno(Alumno *);
+    void AgregarDocente(Docente *);
+    Nodo *Ubicar(string *);
     void Mostrar();
     void Eliminar();
 
@@ -56,12 +56,9 @@ bool Lista::EsVacio()
     return primerNodo == nullptr;
 }
 
-void Lista::AgregarPersona()
+void Lista::AgregarPersona(Persona *dato)
 {
     Nodo *aux = primerNodo;
-    //Input Persona
-    Persona *dato = new Persona();
-    dato->Leer();
     //Guarda Dato
     if (EsVacio())
     {
@@ -76,12 +73,9 @@ void Lista::AgregarPersona()
     cout << "Persona registrada..." << endl;
 }
 
-void Lista::AgregarAlumno()
+void Lista::AgregarAlumno(Alumno *dato)
 {
     Nodo *aux = primerNodo;
-    //Input Persona
-    Alumno *dato = new Alumno();
-    dato->Leer();
     //Guarda Dato
     if (EsVacio())
     {
@@ -96,12 +90,9 @@ void Lista::AgregarAlumno()
     cout << "Alumno registrado..." << endl;
 }
 
-void Lista::AgregarDocente()
+void Lista::AgregarDocente(Docente *dato)
 {
     Nodo *aux = primerNodo;
-    //Input Persona
-    Docente *dato = new Docente();
-    dato->Leer();
     //Guarda Dato
     if (EsVacio())
     {
@@ -130,25 +121,20 @@ void Lista::Procesar(void (*function)(Nodo *per) = nullptr)
     }
 }
 
-Nodo *Lista::Ubicar()
+Nodo *Lista::Ubicar(string *pDni)
 {
-    if (EsVacio())
-    {
-        cout << "Lista vacia" << endl;
-        return nullptr;
-    }
+    static Nodo *encontrado;
+    static string *auxDni = pDni;
+    cout<<"buscanod el dni ::::: " << *auxDni<<endl;
+    Procesar([](Nodo *p) {
+        if (p->GetPersona()->GetDni() == *auxDni){
+            encontrado = p;
+        }
+    });
+    if(encontrado->GetPersona()->GetDni() == *pDni)
+        return encontrado ;//verificar que en realidad se encontro y no es el guarado
     else
-    {
-        static Nodo *aux1;
-        static string auxDni;
-        cout << "Ingresen dni: ";
-        cin >> auxDni;
-        Procesar([](Nodo *p) {
-            if (p->GetPersona()->GetDni() == auxDni)
-                aux1 = p;
-        });
-        return aux1;
-    }
+        return nullptr;
 }
 
 int Lista::Index()
@@ -227,3 +213,4 @@ void Lista::Eliminar() //falta mostrar no ubica a la persona
 }
 
 //@@github 4/30/2021 00:55
+//algunas veces se cierra de la nada(progbar el menu de opciones que casos osn y go stackoverflow)
