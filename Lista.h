@@ -120,7 +120,7 @@ void Lista::Procesar(void (*function)(Nodo *per) = nullptr)
         aux = aux->SiguienteNodo();
     }
 }
-
+//Al ejecutar el programa y ubicar un dni no agregado ocurre un bug
 Nodo *Lista::Ubicar(string *pDni)
 {
     static Nodo *encontrado;
